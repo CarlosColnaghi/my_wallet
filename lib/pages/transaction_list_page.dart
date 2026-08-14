@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/pages/transaction_form_page.dart';
 
 class TransactionListPage extends StatefulWidget {
   @override
-  State createState() => TransactionListPageState();
+  State createState() => TransactionListState();
 }
 
-class TransactionListPageState extends State<TransactionListPage>{
+class TransactionListState extends State<TransactionListPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +33,9 @@ class TransactionListPageState extends State<TransactionListPage>{
         }
       }),
       floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return TransactionFormPage();
+        }));
       },
       backgroundColor: Colors.greenAccent,
       foregroundColor: Colors.white,
