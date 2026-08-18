@@ -10,7 +10,14 @@ class TransactionFormState extends State<TransactionFormPage>{
     return InputDecoration(
       labelText: labelText,
       labelStyle: TextStyle(color: Colors.black),
-      floatingLabelStyle: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold, fontSize: 20),
+      floatingLabelStyle: WidgetStateTextStyle.resolveWith((states){
+        final focused = states.contains(WidgetState.focused);
+        return TextStyle(
+          color: focused ? Colors.greenAccent : Colors.black,
+          fontWeight: focused ? FontWeight.bold : FontWeight.normal,
+          fontSize: 20
+        );
+      }),
       border: OutlineInputBorder(),
       focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent, width: 2)),
       hintText: hintText,
@@ -39,12 +46,14 @@ class TransactionFormState extends State<TransactionFormPage>{
             ),
             SizedBox(height: 10,),
             TextField(
-                decoration: _inputDecoration('Descrição', 'Ex.: Aluguel referente ao mês de agosto')
+              decoration: _inputDecoration('Descrição', 'Ex.: Aluguel referente ao mês de agosto'),
+              maxLines: 2,
             ),
             SizedBox(height: 10,),
             TextField(
-              decoration: _inputDecoration('Valor', 'R\$ 0,00')
+              decoration: _inputDecoration('Valor', 'R\$ 0,00'),
             ),
+            //TODO: implement radio buttons
             SizedBox(height: 30,),
             ElevatedButton(
               onPressed: () {},
