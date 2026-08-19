@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -6,6 +7,12 @@ class TransactionFormPage extends StatefulWidget {
 }
 
 class TransactionFormState extends State<TransactionFormPage>{
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'pt_BR',
+    symbol: 'R\$ ',
+    decimalDigits: 2,
+  );
+
   InputDecoration _inputDecoration(String labelText, String hintText){
     return InputDecoration(
       labelText: labelText,
@@ -50,7 +57,9 @@ class TransactionFormState extends State<TransactionFormPage>{
               maxLines: 2,
             ),
             SizedBox(height: 10,),
-            TextField(
+            TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: [_currencyFormatter],
               decoration: _inputDecoration('Valor', 'R\$ 0,00'),
             ),
             //TODO: implement radio buttons
