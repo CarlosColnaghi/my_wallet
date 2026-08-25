@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/pages/transaction_form_page.dart';
+import 'package:my_wallet/util/db.dart';
 
 class TransactionListPage extends StatefulWidget {
   @override
@@ -9,6 +10,8 @@ class TransactionListPage extends StatefulWidget {
 class TransactionListState extends State<TransactionListPage>{
   @override
   Widget build(BuildContext context) {
+    Db db = Db();
+    db.database;
     return Scaffold(
       appBar: AppBar(
         title: Text(
