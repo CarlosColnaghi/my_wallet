@@ -1,4 +1,4 @@
-import 'package:my_wallet/model/TransactionType.dart';
+import 'package:my_wallet/model/transaction_type.dart';
 
 class Transaction {
   String? _uuid;

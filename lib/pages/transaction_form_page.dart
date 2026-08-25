@@ -1,7 +1,7 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 
-import '../model/TransactionType.dart';
+import '../model/transaction_type.dart';
 
 class TransactionFormPage extends StatefulWidget {
   @override
