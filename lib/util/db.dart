@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:my_wallet/model/transaction.dart' as model;
 
 class Db{
-  String _databaseName = "transactions";
+  String _tableName = "transactions";
   String _uuid = "uuid";
   String _name = "name";
   String _description = "description";
@@ -23,7 +24,7 @@ class Db{
   static Database? _database;
 
   Future<Database> initialize() async{
-    String path = "${(await getApplicationDocumentsDirectory()).path}_$_databaseName.db";
+    String path = "${(await getApplicationDocumentsDirectory()).path}_$_tableName.db";
     return await openDatabase(path, version: 1, onCreate: _create);
   }
 
@@ -34,7 +35,7 @@ class Db{
 
   void _create(Database database, int newVersion) async{
     await database.execute("""
-      CREATE TABLE IF NOT EXISTS $_databaseName (
+      CREATE TABLE IF NOT EXISTS $_tableName (
         $_uuid        TEXT PRIMARY KEY NOT NULL DEFAULT (lower(hex(randomblob(16)))),
         $_name        TEXT NOT NULL,
         $_description TEXT,
@@ -45,15 +46,18 @@ class Db{
      """);
 
     await database.execute("""
-      CREATE TRIGGER IF NOT EXISTS trg_$_databaseName$_updatedAt
+      CREATE TRIGGER IF NOT EXISTS trg_$_tableName$_updatedAt
       AFTER UPDATE OF $_name, $_description, $_value, $_type
       ON transactions
       FOR EACH ROW
       BEGIN
-          UPDATE $_databaseName
+          UPDATE $_tableName
           SET $_updatedAt = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
           WHERE $_uuid = NEW.$_uuid;
       END;
     """);
   }
+
+  Future<void> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
+
 }

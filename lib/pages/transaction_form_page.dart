@@ -1,6 +1,9 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:my_wallet/util/db.dart';
+import 'package:sqflite/sqflite.dart';
 
+import 'package:my_wallet/model/transaction.dart' as model;
 import '../model/transaction_type.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -35,12 +38,17 @@ class TransactionFormState extends State<TransactionFormPage> {
     );
   }
 
+  Db _db = Db();
+  TextEditingController _titleTextEditingController = TextEditingController();
+  TextEditingController _descriptionTextEditingController = TextEditingController();
+  TextEditingController _valueTextEditingController = TextEditingController();
+
   final WidgetStateColor _widgetStateColor = WidgetStateColor.resolveWith((states) {
-      if (states.contains(WidgetState.selected)) {
-        return Colors.greenAccent;
-      }
-      return Colors.black;
-    });
+    if (states.contains(WidgetState.selected)) {
+      return Colors.greenAccent;
+    }
+    return Colors.black;
+  });
 
   TransactionType? _transactionType = TransactionType.income;
   @override
@@ -56,6 +64,7 @@ class TransactionFormState extends State<TransactionFormPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
+              controller: _titleTextEditingController,
               decoration: _inputDecoration(
                 'Título',
                 'Ex.: Aluguel, Água, Luz, Gás e etc.',
@@ -63,6 +72,7 @@ class TransactionFormState extends State<TransactionFormPage> {
             ),
             SizedBox(height: 10),
             TextField(
+              controller: _descriptionTextEditingController,
               decoration: _inputDecoration(
                 'Descrição',
                 'Ex.: Aluguel referente ao mês de agosto',
@@ -71,6 +81,7 @@ class TransactionFormState extends State<TransactionFormPage> {
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: _valueTextEditingController,
               keyboardType: TextInputType.number,
               inputFormatters: [_currencyFormatter],
               decoration: _inputDecoration('Valor', 'R\$ 0,00'),
@@ -105,7 +116,10 @@ class TransactionFormState extends State<TransactionFormPage> {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, double.parse(_currencyFormatter.getUnformattedValue().toString()), _transactionType!));
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
                 foregroundColor: Colors.white,

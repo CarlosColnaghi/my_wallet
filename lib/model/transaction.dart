@@ -21,6 +21,18 @@ class Transaction {
   DateTime? get createdAt => _createdAt;
   DateTime? get updatedAt => _updatedAt;
 
+  Map<String, dynamic> toMap(){
+    return {
+      if (_uuid != null) 'uuid': _uuid,
+      'name': _name,
+      'description': _description,
+      'value': _value,
+      'type': _type.label,
+      if (_createdAt != null) 'createdAt': _createdAt,
+      if (_updatedAt != null) 'updatedAt': _updatedAt
+    };
+  }
+
   set name(String name){
     _name = name;
   }
@@ -36,5 +48,4 @@ class Transaction {
   set type(TransactionType type){
     _type = type;
   }
-
 }
