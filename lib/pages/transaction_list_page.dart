@@ -1,5 +1,6 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_wallet/model/transaction.dart';
 import 'package:my_wallet/model/transaction_type.dart';
 import 'package:my_wallet/pages/transaction_form_page.dart';
@@ -20,6 +21,8 @@ class TransactionListState extends State<TransactionListPage>{
     symbol: 'R\$ ',
     decimalDigits: 2,
   );
+
+  final _dateFormatter = DateFormat("dd/MM/yyyy 'às' HH:mm");
 
   @override
   void initState() {
@@ -51,7 +54,13 @@ class TransactionListState extends State<TransactionListPage>{
                   child: ListTile(
                     leading: isIncome ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red,),
                     title: Text(transactions[i].name),
-                    subtitle: Text(transactions[i].description!),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(transactions[i].description!),
+                        Text(_dateFormatter.format(transactions[i].createdAt!.toLocal())),
+                      ],
+                    ),
                     trailing: isIncome ? Text('R\$${transactions[i].value}', style: TextStyle(fontSize: 20)) : Text('- R\$${transactions[i].value}', style: TextStyle(fontSize: 20),),
                   )
                 );
