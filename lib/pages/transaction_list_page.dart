@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:my_wallet/model/transaction.dart';
 import 'package:my_wallet/model/transaction_type.dart';
@@ -12,6 +13,13 @@ class TransactionListPage extends StatefulWidget {
 class TransactionListState extends State<TransactionListPage>{
   final Db _db = Db();
   List<Transaction> transactions = [];
+  double total = 0.0;
+
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'pt_BR',
+    symbol: 'R\$ ',
+    decimalDigits: 2,
+  );
 
   @override
   void initState() {
@@ -54,7 +62,7 @@ class TransactionListState extends State<TransactionListPage>{
             padding: EdgeInsetsGeometry.directional(start: 20, top: 5, end: 20, bottom: 5),
             child: SizedBox(
               height: 100,
-              child: Text("R\$ 0.00", style: TextStyle(fontSize: 50),),
+              child: Text(_currencyFormatter.formatDouble(total), style: TextStyle(fontSize: 50),),
             ),
           )
       ],),
@@ -74,6 +82,7 @@ class TransactionListState extends State<TransactionListPage>{
     _db.get().then((list) => {
       setState(() {
         transactions =  list.map((it) => Transaction.fromMap(it)).toList();
+        total = transactions.fold(0.0, (sum, transaction) =>  transaction.type == TransactionType.income ? sum + transaction.value : sum - transaction.value);
       })
     });
   }
