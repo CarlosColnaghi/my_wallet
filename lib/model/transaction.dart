@@ -32,6 +32,17 @@ class Transaction {
     };
   }
 
+  Transaction.fromMap(Map<String, dynamic> map) :
+    _id = map['id'] as int?,
+    _transactionId = map['transactionId'],
+    _name = map['name'],
+    _description = map['description'],
+    _value = map['value'].toDouble(),
+    _type = TransactionType.values.firstWhere((type) => type.label == map['type']),
+    _createdAt = DateTime.parse(map['createdAt']),
+    _updatedAt = DateTime.parse(map['updatedAt']);
+
+
   set name(String name){
     _name = name;
   }

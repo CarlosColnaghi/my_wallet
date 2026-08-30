@@ -62,4 +62,6 @@ class Db{
 
   Future<int> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
 
+  Future<List> get() async => await (await database).rawQuery("SELECT * FROM $_tableName order by $_createdAt ASC");
+
 }

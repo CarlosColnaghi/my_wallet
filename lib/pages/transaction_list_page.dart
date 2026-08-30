@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_wallet/model/transaction.dart';
+import 'package:my_wallet/model/transaction_type.dart';
 import 'package:my_wallet/pages/transaction_form_page.dart';
 import 'package:my_wallet/util/db.dart';
 
@@ -8,10 +10,17 @@ class TransactionListPage extends StatefulWidget {
 }
 
 class TransactionListState extends State<TransactionListPage>{
+  final Db _db = Db();
+  List<Transaction> transactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadListData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Db db = Db();
-    db.database;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -26,15 +35,16 @@ class TransactionListState extends State<TransactionListPage>{
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ListView.builder(itemBuilder: (BuildContext context, int i) {
-              if (i < 10) {
+            child: ListView.builder(itemCount: transactions.length, itemBuilder: (BuildContext context, int i) {
+              bool isIncome = transactions[i].type == TransactionType.income ? true : false;
+              if (i < transactions.length) {
                 return Card(
                   elevation: 2.0,
                   child: ListTile(
-                    leading: i%2 == 0 ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red,),
-                    title: Text('Lorem Ipsum'),
-                    subtitle: Text('Lorem Ipsum'),
-                    trailing: i%2 == 0 ? Text('R\$10.00', style: TextStyle(fontSize: 20)) : Text('- R\$10.00', style: TextStyle(fontSize: 20),),
+                    leading: isIncome ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red,),
+                    title: Text(transactions[i].name),
+                    subtitle: Text(transactions[i].description!),
+                    trailing: isIncome ? Text('R\$${transactions[i].value}', style: TextStyle(fontSize: 20)) : Text('- R\$${transactions[i].value}', style: TextStyle(fontSize: 20),),
                   )
                 );
               }
@@ -48,14 +58,24 @@ class TransactionListState extends State<TransactionListPage>{
             ),
           )
       ],),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context){
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        await Navigator.push(context, MaterialPageRoute(builder: (context){
           return TransactionFormPage();
         }));
+        await _loadListData();
       },
       backgroundColor: Colors.greenAccent,
       foregroundColor: Colors.white,
       child: Icon(Icons.add),),
     );
   }
+
+  Future<void> _loadListData() async{
+    _db.get().then((list) => {
+      setState(() {
+        transactions =  list.map((it) => Transaction.fromMap(it)).toList();
+      })
+    });
+  }
+
 }
