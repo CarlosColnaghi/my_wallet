@@ -1,10 +1,9 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_wallet/model/transaction.dart';
 import 'package:my_wallet/model/transaction_type.dart';
 import 'package:my_wallet/pages/transaction_form_page.dart';
 import 'package:my_wallet/util/db.dart';
+import 'package:my_wallet/util/formatter.dart';
 
 class TransactionListPage extends StatefulWidget {
   @override
@@ -15,14 +14,6 @@ class TransactionListState extends State<TransactionListPage>{
   final Db _db = Db();
   List<Transaction> transactions = [];
   double total = 0.0;
-
-  final _currencyFormatter = CurrencyTextInputFormatter.currency(
-    locale: 'pt_BR',
-    symbol: 'R\$ ',
-    decimalDigits: 2,
-  );
-
-  final _dateFormatter = DateFormat("dd/MM/yyyy 'às' HH:mm");
 
   @override
   void initState() {
@@ -58,10 +49,10 @@ class TransactionListState extends State<TransactionListPage>{
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(transactions[i].description!),
-                        Text(_dateFormatter.format(transactions[i].createdAt!.toLocal())),
+                        Text(Formatter.formatDate(transactions[i].createdAt!.toLocal())),
                       ],
                     ),
-                    trailing: isIncome ? Text('R\$${transactions[i].value}', style: TextStyle(fontSize: 20)) : Text('- R\$${transactions[i].value}', style: TextStyle(fontSize: 20),),
+                    trailing: isIncome ? Text(Formatter.formatCurrency(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrency(transactions[i].value)}', style: TextStyle(fontSize: 20),),
                   )
                 );
               }
@@ -71,7 +62,7 @@ class TransactionListState extends State<TransactionListPage>{
             padding: EdgeInsetsGeometry.directional(start: 20, top: 5, end: 20, bottom: 5),
             child: SizedBox(
               height: 100,
-              child: Text(_currencyFormatter.formatDouble(total), style: TextStyle(fontSize: 50),),
+              child: Text(Formatter.formatCurrency(total), style: TextStyle(fontSize: 50),),
             ),
           )
       ],),
