@@ -6,7 +6,8 @@ import 'package:my_wallet/model/transaction.dart' as model;
 
 class Db{
   String _tableName = "transactions";
-  String _uuid = "uuid";
+  String _id = "id";
+  String _transactionId = "transactionId";
   String _name = "name";
   String _description = "description";
   String _value = "value";
@@ -24,7 +25,7 @@ class Db{
   static Database? _database;
 
   Future<Database> initialize() async{
-    String path = "${(await getApplicationDocumentsDirectory()).path}_$_tableName.db";
+    String path = "${(await getApplicationDocumentsDirectory()).path}_my_wallet.db";
     return await openDatabase(path, version: 1, onCreate: _create);
   }
 
@@ -36,13 +37,14 @@ class Db{
   void _create(Database database, int newVersion) async{
     await database.execute("""
       CREATE TABLE IF NOT EXISTS $_tableName (
-        $_uuid        TEXT PRIMARY KEY NOT NULL DEFAULT (lower(hex(randomblob(16)))),
-        $_name        TEXT NOT NULL,
-        $_description TEXT,
-        $_value       REAL NOT NULL,
-        $_type        TEXT NOT NULL,
-        $_createdAt   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-        $_updatedAt   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')));
+        $_id            INTEGER PRIMARY KEY,
+        $_transactionId TEXT NOT NULL UNIQUE DEFAULT (lower(hex(randomblob(16)))),
+        $_name          TEXT NOT NULL,
+        $_description   TEXT,
+        $_value         REAL NOT NULL,
+        $_type          TEXT NOT NULL,
+        $_createdAt     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+        $_updatedAt     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')));
      """);
 
     await database.execute("""
@@ -53,11 +55,11 @@ class Db{
       BEGIN
           UPDATE $_tableName
           SET $_updatedAt = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
-          WHERE $_uuid = NEW.$_uuid;
+          WHERE $_id = NEW.$_id;
       END;
     """);
   }
 
-  Future<void> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
+  Future<int> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
 
 }

@@ -1,7 +1,8 @@
 import 'package:my_wallet/model/transaction_type.dart';
 
 class Transaction {
-  String? _uuid;
+  int? _id;
+  String? _transactionId;
   String _name;
   String? _description;
   double _value;
@@ -9,11 +10,12 @@ class Transaction {
   DateTime? _createdAt;
   DateTime? _updatedAt;
 
-  Transaction(this._uuid, this._name, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
+  Transaction(this._id, this._transactionId, this._name, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
 
   Transaction.create(this._name, this._description, this._value, this._type);
 
-  String? get uuid => _uuid;
+  int? get id => _id;
+  String? get transactionId => _transactionId;
   String get name => _name;
   String? get description => _description;
   double get value => _value;
@@ -23,13 +25,10 @@ class Transaction {
 
   Map<String, dynamic> toMap(){
     return {
-      if (_uuid != null) 'uuid': _uuid,
       'name': _name,
       'description': _description,
       'value': _value,
-      'type': _type.label,
-      if (_createdAt != null) 'createdAt': _createdAt,
-      if (_updatedAt != null) 'updatedAt': _updatedAt
+      'type': _type.label
     };
   }
 
