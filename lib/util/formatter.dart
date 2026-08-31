@@ -19,4 +19,8 @@ class Formatter{
   static String formatCurrency(double value){
     return _currencyFormatter.formatDouble(value);
   }
+
+  static CurrencyTextInputFormatter getCurrencyFormatter(){
+    return _currencyFormatter;
+  }
 }

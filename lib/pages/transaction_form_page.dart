@@ -1,8 +1,8 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:my_wallet/util/db.dart';
 
 import 'package:my_wallet/model/transaction.dart' as model;
+import 'package:my_wallet/util/formatter.dart';
 import '../model/transaction_type.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -15,12 +15,6 @@ class TransactionFormPage extends StatefulWidget {
 }
 
 class TransactionFormState extends State<TransactionFormPage> {
-  final _currencyFormatter = CurrencyTextInputFormatter.currency(
-    locale: 'pt_BR',
-    symbol: 'R\$ ',
-    decimalDigits: 2,
-  );
-
   InputDecoration _inputDecoration(String labelText, String hintText) {
     return InputDecoration(
       labelText: labelText,
@@ -86,8 +80,8 @@ class TransactionFormState extends State<TransactionFormPage> {
             TextFormField(
               controller: _valueTextEditingController,
               keyboardType: TextInputType.number,
-              inputFormatters: [_currencyFormatter],
-              decoration: _inputDecoration('Valor', 'R\$ 0,00'),
+              inputFormatters: [Formatter.getCurrencyFormatter()],
+              decoration: _inputDecoration('Valor', Formatter.formatCurrency(0.0)),
             ),
             SizedBox(
               height: 50,
@@ -120,7 +114,7 @@ class TransactionFormState extends State<TransactionFormPage> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, double.parse(_currencyFormatter.getUnformattedValue().toString()), _transactionType!));
+                _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, double.parse(Formatter.getCurrencyFormatter().getUnformattedValue().toString()), _transactionType!));
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
