@@ -53,10 +53,11 @@ class TransactionListState extends State<TransactionListPage>{
                       ],
                     ),
                     trailing: isIncome ? Text(Formatter.formatCurrency(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrency(transactions[i].value)}', style: TextStyle(fontSize: 20),),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                    onTap: () async {
+                      await Navigator.push(context, MaterialPageRoute(builder: (context){
                         return TransactionFormPage(transactions[i]);
                       }));
+                      await _loadListData();
                     },
                   )
                 );

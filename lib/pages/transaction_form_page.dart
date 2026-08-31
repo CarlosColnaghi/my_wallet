@@ -127,6 +127,11 @@ class TransactionFormState extends State<TransactionFormPage> {
               visible: widget.transaction != null,
               child: ElevatedButton(
                 onPressed: (){
+                  final transaction = widget.transaction;
+                  if(transaction != null){
+                    _db.delete(transaction.id!);
+                    Navigator.pop(context);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(139, 0, 0, 100),
