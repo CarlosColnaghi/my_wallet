@@ -1,12 +1,15 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:my_wallet/util/db.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'package:my_wallet/model/transaction.dart' as model;
 import '../model/transaction_type.dart';
 
 class TransactionFormPage extends StatefulWidget {
+  model.Transaction? transaction;
+
+  TransactionFormPage(this.transaction, {super.key});
+
   @override
   State createState() => TransactionFormState();
 }
@@ -125,6 +128,18 @@ class TransactionFormState extends State<TransactionFormPage> {
                 foregroundColor: Colors.white,
               ),
               child: Text('Salvar'),
+            ),
+            Visibility(
+              visible: widget.transaction != null,
+              child: ElevatedButton(
+                onPressed: (){
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(139, 0, 0, 100),
+                  foregroundColor: Colors.white,
+                ),
+                child: Text('Excluir'),
+              ),
             ),
             ElevatedButton(
               onPressed: () {

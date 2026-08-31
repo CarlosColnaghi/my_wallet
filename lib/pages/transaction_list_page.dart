@@ -37,7 +37,7 @@ class TransactionListState extends State<TransactionListPage>{
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ListView.builder(itemCount: transactions.length, itemBuilder: (BuildContext context, int i) {
+            child: ListView.builder(itemCount: transactions.length,  itemBuilder: (BuildContext context, int i) {
               bool isIncome = transactions[i].type == TransactionType.income ? true : false;
               if (i < transactions.length) {
                 return Card(
@@ -53,6 +53,11 @@ class TransactionListState extends State<TransactionListPage>{
                       ],
                     ),
                     trailing: isIncome ? Text(Formatter.formatCurrency(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrency(transactions[i].value)}', style: TextStyle(fontSize: 20),),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return TransactionFormPage(transactions[i]);
+                      }));
+                    },
                   )
                 );
               }
@@ -68,7 +73,7 @@ class TransactionListState extends State<TransactionListPage>{
       ],),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         await Navigator.push(context, MaterialPageRoute(builder: (context){
-          return TransactionFormPage();
+          return TransactionFormPage(null);
         }));
         await _loadListData();
       },
