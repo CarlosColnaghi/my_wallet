@@ -124,6 +124,16 @@ class TransactionFormState extends State<TransactionFormPage> {
                 ),
               ),
             ),
+            if(widget.transaction != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 30),
+                  Text('Criado em ${Formatter.formatDate(widget.transaction!.createdAt!)}', style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text('Atualizado em ${Formatter.formatDate(widget.transaction!.updatedAt!)}', style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text('ID: ${widget.transaction!.transactionId!}', style: TextStyle(fontWeight: FontWeight.w500),),
+                ],
+              ),
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
@@ -141,9 +151,8 @@ class TransactionFormState extends State<TransactionFormPage> {
               ),
               child: Text('Salvar'),
             ),
-            Visibility(
-              visible: widget.transaction != null,
-              child: ElevatedButton(
+            if(widget.transaction != null)
+              ElevatedButton(
                 onPressed: (){
                   final transaction = widget.transaction;
                   if(transaction != null){
@@ -157,7 +166,6 @@ class TransactionFormState extends State<TransactionFormPage> {
                 ),
                 child: Text('Excluir'),
               ),
-            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
