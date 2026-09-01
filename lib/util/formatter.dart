@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
 
@@ -6,7 +8,13 @@ class Formatter{
 
   static final DateFormat _dateFormatter = DateFormat("dd/MM/yyyy 'às' HH:mm");
 
-  static final CurrencyTextInputFormatter _currencyFormatter = CurrencyTextInputFormatter.currency(
+  static final CurrencyTextInputFormatter _currencyTextInputFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'pt_BR',
+    symbol: 'R\$ ',
+    decimalDigits: 2,
+  );
+
+  static final NumberFormat _currencyNumberFormatter = NumberFormat.currency(
     locale: 'pt_BR',
     symbol: 'R\$ ',
     decimalDigits: 2,
@@ -16,11 +24,15 @@ class Formatter{
     return _dateFormatter.format(date);
   }
 
-  static String formatCurrency(double value){
-    return _currencyFormatter.formatDouble(value);
+  static String formatCurrencyFromDoubleToText(double value){
+    return _currencyNumberFormatter.format(value);
   }
 
-  static CurrencyTextInputFormatter getCurrencyFormatter(){
-    return _currencyFormatter;
+  static double formatCurrencyFromTextToDouble(String value){
+    return _currencyNumberFormatter.parse(value).toDouble();
+  }
+
+  static CurrencyTextInputFormatter getCurrencyTextInputFormatter(){
+    return _currencyTextInputFormatter;
   }
 }

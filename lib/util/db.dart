@@ -62,7 +62,9 @@ class Db{
 
   Future<int> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
 
-  Future<List> get() async => await (await database).rawQuery("SELECT * FROM $_tableName ORDER BY $_createdAt ASC");
+  Future<int> update(model.Transaction transaction, int id) async => await (await database).update(_tableName, transaction.toMap(), where: '$_id = ?', whereArgs: [id]);
+
+  Future<List> get() async => await (await database).rawQuery('SELECT * FROM $_tableName ORDER BY $_createdAt ASC');
 
   Future<int> delete(int id) async => await (await database).rawDelete('DELETE FROM $_tableName WHERE $_id = $id');
 

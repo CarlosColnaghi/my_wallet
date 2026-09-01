@@ -56,7 +56,7 @@ class TransactionFormState extends State<TransactionFormPage> {
     if(transaction != null){
       _titleTextEditingController.text = transaction.name;
       _descriptionTextEditingController.text = transaction.description!;
-      _valueTextEditingController.text = Formatter.formatCurrency(transaction.value).toString();
+      _valueTextEditingController.text = Formatter.formatCurrencyFromDoubleToText(transaction.value);
       _transactionType = transaction.type;
     }
   }
@@ -93,8 +93,8 @@ class TransactionFormState extends State<TransactionFormPage> {
             TextFormField(
               controller: _valueTextEditingController,
               keyboardType: TextInputType.number,
-              inputFormatters: [Formatter.getCurrencyFormatter()],
-              decoration: _inputDecoration('Valor', Formatter.formatCurrency(0.0)),
+              inputFormatters: [Formatter.getCurrencyTextInputFormatter()],
+              decoration: _inputDecoration('Valor', Formatter.formatCurrencyFromDoubleToText(0.0)),
             ),
             SizedBox(
               height: 50,
@@ -127,7 +127,12 @@ class TransactionFormState extends State<TransactionFormPage> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, double.parse(Formatter.getCurrencyFormatter().getUnformattedValue().toString()), _transactionType!));
+                final model.Transaction? transaction = widget.transaction;
+                if(transaction != null){
+                  _db.update(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text,Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!), transaction.id!);
+                }else{
+                  _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!));
+                }
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(

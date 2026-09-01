@@ -52,7 +52,7 @@ class TransactionListState extends State<TransactionListPage>{
                         Text(Formatter.formatDate(transactions[i].createdAt!.toLocal())),
                       ],
                     ),
-                    trailing: isIncome ? Text(Formatter.formatCurrency(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrency(transactions[i].value)}', style: TextStyle(fontSize: 20),),
+                    trailing: isIncome ? Text(Formatter.formatCurrencyFromDoubleToText(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrencyFromDoubleToText(transactions[i].value)}', style: TextStyle(fontSize: 20),),
                     onTap: () async {
                       await Navigator.push(context, MaterialPageRoute(builder: (context){
                         return TransactionFormPage(transactions[i]);
@@ -68,7 +68,7 @@ class TransactionListState extends State<TransactionListPage>{
             padding: EdgeInsetsGeometry.directional(start: 20, top: 5, end: 20, bottom: 5),
             child: SizedBox(
               height: 100,
-              child: Text(Formatter.formatCurrency(total), style: TextStyle(fontSize: 50),),
+              child: Text(Formatter.formatCurrencyFromDoubleToText(total), style: TextStyle(fontSize: 50),),
             ),
           )
       ],),
