@@ -36,9 +36,9 @@ class TransactionFormState extends State<TransactionFormPage> {
   }
 
   Db _db = Db();
-  TextEditingController _titleTextEditingController = TextEditingController();
-  TextEditingController _descriptionTextEditingController = TextEditingController();
-  TextEditingController _valueTextEditingController = TextEditingController();
+  final TextEditingController _titleTextEditingController = TextEditingController();
+  final TextEditingController _descriptionTextEditingController = TextEditingController();
+  final TextEditingController _valueTextEditingController = TextEditingController();
 
   final WidgetStateColor _widgetStateColor = WidgetStateColor.resolveWith((states) {
     if (states.contains(WidgetState.selected)) {
@@ -48,6 +48,19 @@ class TransactionFormState extends State<TransactionFormPage> {
   });
 
   TransactionType? _transactionType = TransactionType.income;
+
+  @override
+  void initState() {
+    super.initState();
+    final transaction = widget.transaction;
+    if(transaction != null){
+      _titleTextEditingController.text = transaction.name;
+      _descriptionTextEditingController.text = transaction.description!;
+      _valueTextEditingController.text = Formatter.formatCurrency(transaction.value).toString();
+      _transactionType = transaction.type;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
