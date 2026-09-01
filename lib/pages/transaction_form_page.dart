@@ -129,8 +129,8 @@ class TransactionFormState extends State<TransactionFormPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 30),
-                  Text('Criado em ${Formatter.formatDate(widget.transaction!.createdAt!)}', style: TextStyle(fontWeight: FontWeight.w500),),
-                  Text('Atualizado em ${Formatter.formatDate(widget.transaction!.updatedAt!)}', style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text('Criado em ${Formatter.formatDate(widget.transaction!.createdAt!.toLocal())}', style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text('Atualizado em ${Formatter.formatDate(widget.transaction!.updatedAt!.toLocal())}', style: TextStyle(fontWeight: FontWeight.w500),),
                   Text('ID: ${widget.transaction!.transactionId!}', style: TextStyle(fontWeight: FontWeight.w500),),
                 ],
               ),
@@ -153,11 +153,34 @@ class TransactionFormState extends State<TransactionFormPage> {
             ),
             if(widget.transaction != null)
               ElevatedButton(
-                onPressed: (){
+                onPressed: () async {
                   final transaction = widget.transaction;
                   if(transaction != null){
-                    _db.delete(transaction.id!);
-                    Navigator.pop(context);
+                    bool confirmed = await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Excluir transação'),
+                        content: Text('Deseja excluir a transação?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => {
+                              Navigator.pop(context, false)
+                            },
+                            child: Text('Cancelar', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+                          ),
+                          TextButton(
+                            onPressed: () => {
+                              Navigator.pop(context, true)
+                            },
+                            child: Text('Excluir', style: TextStyle(color: Color.fromRGBO(139, 0, 0, 100), fontWeight: FontWeight.bold),),
+                          )
+                        ],
+                      )
+                    );
+                    if(confirmed){
+                      _db.delete(transaction.id!);
+                      Navigator.pop(context);
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(
