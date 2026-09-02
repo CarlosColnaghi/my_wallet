@@ -43,7 +43,7 @@ class TransactionListState extends State<TransactionListPage>{
                 return Card(
                   elevation: 2.0,
                   child: ListTile(
-                    leading: isIncome ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red,),
+                    leading: isIncome ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green.shade700,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red.shade700,),
                     title: Text(transactions[i].title),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,7 +52,7 @@ class TransactionListState extends State<TransactionListPage>{
                         Text(Formatter.formatDate(transactions[i].createdAt!.toLocal())),
                       ],
                     ),
-                    trailing: isIncome ? Text(Formatter.formatCurrencyFromDoubleToText(transactions[i].value), style: TextStyle(fontSize: 20)) : Text('- ${Formatter.formatCurrencyFromDoubleToText(transactions[i].value)}', style: TextStyle(fontSize: 20),),
+                    trailing: isIncome ? Text(Formatter.formatCurrencyFromDoubleToText(transactions[i].value), style: TextStyle(fontSize: 20, color: Colors.green.shade700)) : Text('- ${Formatter.formatCurrencyFromDoubleToText(transactions[i].value)}', style: TextStyle(fontSize: 20, color: Colors.red.shade700),),
                     onTap: () async {
                       await Navigator.push(context, MaterialPageRoute(builder: (context){
                         return TransactionFormPage(transactions[i]);
@@ -68,7 +68,7 @@ class TransactionListState extends State<TransactionListPage>{
             padding: EdgeInsetsGeometry.directional(start: 20, top: 5, end: 20, bottom: 5),
             child: SizedBox(
               height: 100,
-              child: Text(Formatter.formatCurrencyFromDoubleToText(total), style: TextStyle(fontSize: 50),),
+              child: Text(Formatter.formatCurrencyFromDoubleToText(total), style: TextStyle(fontSize: 50, color: total > 0 ? Colors.green.shade700 : total < 0 ? Colors.red.shade700 : Colors.grey.shade800),),
             ),
           )
       ],),
@@ -92,5 +92,4 @@ class TransactionListState extends State<TransactionListPage>{
       })
     });
   }
-
 }

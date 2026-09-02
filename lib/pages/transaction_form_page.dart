@@ -166,13 +166,13 @@ class TransactionFormState extends State<TransactionFormPage> {
                             onPressed: () => {
                               Navigator.pop(context, false)
                             },
-                            child: Text('Cancelar', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),),
+                            child: Text('Cancelar', style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.bold),),
                           ),
                           TextButton(
                             onPressed: () => {
                               Navigator.pop(context, true)
                             },
-                            child: Text('Excluir', style: TextStyle(color: Color.fromRGBO(139, 0, 0, 100), fontWeight: FontWeight.bold),),
+                            child: Text('Excluir', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),),
                           )
                         ],
                       )
@@ -184,7 +184,7 @@ class TransactionFormState extends State<TransactionFormPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(139, 0, 0, 100),
+                  backgroundColor: Colors.red.shade900,
                   foregroundColor: Colors.white,
                 ),
                 child: Text('Excluir'),
