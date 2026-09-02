@@ -54,7 +54,7 @@ class TransactionFormState extends State<TransactionFormPage> {
     super.initState();
     final transaction = widget.transaction;
     if(transaction != null){
-      _titleTextEditingController.text = transaction.name;
+      _titleTextEditingController.text = transaction.title;
       _descriptionTextEditingController.text = transaction.description!;
       _valueTextEditingController.text = Formatter.formatCurrencyFromDoubleToText(transaction.value);
       _transactionType = transaction.type;

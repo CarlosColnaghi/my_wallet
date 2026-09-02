@@ -44,7 +44,7 @@ class TransactionListState extends State<TransactionListPage>{
                   elevation: 2.0,
                   child: ListTile(
                     leading: isIncome ? Icon(Icons.arrow_circle_up_rounded, size: 35, color: Colors.green,) : Icon(Icons.arrow_circle_down, size: 35, color: Colors.red,),
-                    title: Text(transactions[i].name),
+                    title: Text(transactions[i].title),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

@@ -8,7 +8,7 @@ class Db{
   String _tableName = "transactions";
   String _id = "id";
   String _transactionId = "transactionId";
-  String _name = "name";
+  String _title = "title";
   String _description = "description";
   String _value = "value";
   String _type = "type";
@@ -25,7 +25,7 @@ class Db{
   static Database? _database;
 
   Future<Database> initialize() async{
-    String path = "${(await getApplicationDocumentsDirectory()).path}_my_wallet.db";
+    String path = "${(await getApplicationDocumentsDirectory()).path}_my_wallet_v1.db";
     return await openDatabase(path, version: 1, onCreate: _create);
   }
 
@@ -39,7 +39,7 @@ class Db{
       CREATE TABLE IF NOT EXISTS $_tableName (
         $_id            INTEGER PRIMARY KEY,
         $_transactionId TEXT NOT NULL UNIQUE DEFAULT (lower(hex(randomblob(16)))),
-        $_name          TEXT NOT NULL,
+        $_title         TEXT NOT NULL,
         $_description   TEXT,
         $_value         REAL NOT NULL,
         $_type          TEXT NOT NULL,
@@ -49,7 +49,7 @@ class Db{
 
     await database.execute("""
       CREATE TRIGGER IF NOT EXISTS trg_$_tableName$_updatedAt
-      AFTER UPDATE OF $_name, $_description, $_value, $_type
+      AFTER UPDATE OF $_title, $_description, $_value, $_type
       ON transactions
       FOR EACH ROW
       BEGIN
