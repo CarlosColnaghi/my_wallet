@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "740626126605",
+    "project_id": "mywallet-cefd4",
+    "storage_bucket": "mywallet-cefd4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740626126605:android:1ba1faf6ece274548a8244",
+        "android_client_info": {
+          "package_name": "com.example.my_wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0WLnmw3dp0zY2eGhiXjikxPUeAivIHbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
