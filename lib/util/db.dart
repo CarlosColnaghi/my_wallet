@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:my_wallet/model/transaction.dart' as model;
+import 'package:my_wallet/model/wallet_transaction.dart';
 
 class Db{
   String _tableName = "transactions";
@@ -60,9 +60,9 @@ class Db{
     """);
   }
 
-  Future<int> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
+  Future<int> insert(WalletTransaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
 
-  Future<int> update(model.Transaction transaction, int id) async => await (await database).update(_tableName, transaction.toMap(), where: '$_id = ?', whereArgs: [id]);
+  Future<int> update(WalletTransaction transaction, int id) async => await (await database).update(_tableName, transaction.toMap(), where: '$_id = ?', whereArgs: [id]);
 
   Future<List> get() async => await (await database).rawQuery('SELECT * FROM $_tableName ORDER BY $_createdAt ASC');
 

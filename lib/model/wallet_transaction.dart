@@ -1,6 +1,6 @@
-import 'package:my_wallet/model/transaction_type.dart';
+import 'package:my_wallet/model/wallet_transaction_type.dart';
 
-class Transaction {
+class WalletTransaction {
   int? _id;
   String? _transactionId;
   String _title;
@@ -10,9 +10,9 @@ class Transaction {
   DateTime? _createdAt;
   DateTime? _updatedAt;
 
-  Transaction(this._id, this._transactionId, this._title, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
+  WalletTransaction(this._id, this._transactionId, this._title, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
 
-  Transaction.create(this._title, this._description, this._value, this._type);
+  WalletTransaction.create(this._title, this._description, this._value, this._type);
 
   int? get id => _id;
   String? get transactionId => _transactionId;
@@ -32,7 +32,7 @@ class Transaction {
     };
   }
 
-  Transaction.fromMap(Map<String, dynamic> map) :
+  WalletTransaction.fromMap(Map<String, dynamic> map) :
     _id = map['id'] as int?,
     _transactionId = map['transactionId'],
     _title = map['title'],

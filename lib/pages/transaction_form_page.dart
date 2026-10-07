@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_wallet/util/db.dart';
 
-import 'package:my_wallet/model/transaction.dart' as model;
+import 'package:my_wallet/model/wallet_transaction.dart';
 import 'package:my_wallet/util/formatter.dart';
-import '../model/transaction_type.dart';
+import '../model/wallet_transaction_type.dart';
 
 class TransactionFormPage extends StatefulWidget {
-  model.Transaction? transaction;
+  WalletTransaction? transaction;
 
   TransactionFormPage(this.transaction, {super.key});
 
@@ -137,11 +137,11 @@ class TransactionFormState extends State<TransactionFormPage> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                final model.Transaction? transaction = widget.transaction;
+                final WalletTransaction? transaction = widget.transaction;
                 if(transaction != null){
-                  _db.update(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text,Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!), transaction.id!);
+                  _db.update(WalletTransaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text,Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!), transaction.id!);
                 }else{
-                  _db.insert(model.Transaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!));
+                  _db.insert(WalletTransaction.create(_titleTextEditingController.text, _descriptionTextEditingController.text, Formatter.formatCurrencyFromTextToDouble(_valueTextEditingController.text), _transactionType!));
                 }
                 Navigator.pop(context);
               },

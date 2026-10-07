@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:my_wallet/model/transaction.dart';
-import 'package:my_wallet/model/transaction_type.dart';
+import 'package:my_wallet/model/wallet_transaction.dart';
+import 'package:my_wallet/model/wallet_transaction_type.dart';
 import 'package:my_wallet/pages/transaction_form_page.dart';
 import 'package:my_wallet/util/db.dart';
 import 'package:my_wallet/util/formatter.dart';
@@ -12,13 +13,17 @@ class TransactionListPage extends StatefulWidget {
 
 class TransactionListState extends State<TransactionListPage>{
   final Db _db = Db();
-  List<Transaction> transactions = [];
+  List<WalletTransaction> transactions = [];
   double total = 0.0;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
     _loadListData();
+    _firestore.collection('mywallet').add({
+      'helloworld': 'helloworld'
+    });
   }
 
   @override
@@ -87,7 +92,7 @@ class TransactionListState extends State<TransactionListPage>{
   Future<void> _loadListData() async{
     _db.get().then((list) => {
       setState(() {
-        transactions =  list.map((it) => Transaction.fromMap(it)).toList();
+        transactions =  list.map((it) => WalletTransaction.fromMap(it)).toList();
         total = transactions.fold(0.0, (sum, transaction) =>  transaction.type == TransactionType.income ? sum + transaction.value : sum - transaction.value);
       })
     });
