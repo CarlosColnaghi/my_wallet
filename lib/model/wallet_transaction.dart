@@ -1,25 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_wallet/model/wallet_transaction_type.dart';
 
 class WalletTransaction {
-  int? _id;
-  String? _transactionId;
+  String? _id;
   String _title;
   String? _description;
   double _value;
-  TransactionType _type;
+  WalletTransactionType _type;
   DateTime? _createdAt;
   DateTime? _updatedAt;
 
-  WalletTransaction(this._id, this._transactionId, this._title, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
+  WalletTransaction(this._id, this._title, this._description,  this._value, this._type, this._createdAt, this._updatedAt);
 
   WalletTransaction.create(this._title, this._description, this._value, this._type);
 
-  int? get id => _id;
-  String? get transactionId => _transactionId;
+  String? get id => _id;
   String get title => _title;
   String? get description => _description;
   double get value => _value;
-  TransactionType get type => _type;
+  WalletTransactionType get type => _type;
   DateTime? get createdAt => _createdAt;
   DateTime? get updatedAt => _updatedAt;
 
@@ -33,14 +32,22 @@ class WalletTransaction {
   }
 
   WalletTransaction.fromMap(Map<String, dynamic> map) :
-    _id = map['id'] as int?,
-    _transactionId = map['transactionId'],
+    _id = map['id'],
     _title = map['title'],
     _description = map['description'],
     _value = map['value'].toDouble(),
-    _type = TransactionType.values.firstWhere((type) => type.label == map['type']),
+    _type = WalletTransactionType.values.firstWhere((type) => type.label == map['type']),
     _createdAt = DateTime.parse(map['createdAt']),
     _updatedAt = DateTime.parse(map['updatedAt']);
+
+  WalletTransaction.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc):
+      _id = doc.id,
+      _title = doc.data()?['title'] as String,
+      _description = doc.data()?['description'] as String?,
+      _value = (doc.data()?['value'] as num).toDouble(),
+      _type = WalletTransactionType.fromString(doc.data()?['type']),
+      _createdAt = doc.data()?['createdAt'] as DateTime,
+      _updatedAt = doc.data()?['updatedAt'] as DateTime;
 
 
   set title(String title){
@@ -55,7 +62,7 @@ class WalletTransaction {
     _value = value;
   }
 
-  set type(TransactionType type){
+  set type(WalletTransactionType type){
     _type = type;
   }
 }

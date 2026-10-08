@@ -6,8 +6,8 @@ import 'package:my_wallet/pages/transaction_list_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
   runApp(
       MaterialApp(
         title: 'MyWallet',

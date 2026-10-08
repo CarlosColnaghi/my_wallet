@@ -15,16 +15,6 @@ class TransactionListState extends State<TransactionListPage>{
   final Db _db = Db();
   List<WalletTransaction> transactions = [];
   double total = 0.0;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadListData();
-    _firestore.collection('mywallet').add({
-      'helloworld': 'helloworld'
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +33,7 @@ class TransactionListState extends State<TransactionListPage>{
         children: [
           Expanded(
             child: ListView.builder(itemCount: transactions.length,  itemBuilder: (BuildContext context, int i) {
-              bool isIncome = transactions[i].type == TransactionType.income ? true : false;
+              bool isIncome = transactions[i].type == WalletTransactionType.income ? true : false;
               if (i < transactions.length) {
                 return Card(
                   elevation: 2.0,
@@ -62,7 +52,7 @@ class TransactionListState extends State<TransactionListPage>{
                       await Navigator.push(context, MaterialPageRoute(builder: (context){
                         return TransactionFormPage(transactions[i]);
                       }));
-                      await _loadListData();
+                      // await _loadListData();
                     },
                   )
                 );
@@ -81,20 +71,13 @@ class TransactionListState extends State<TransactionListPage>{
         await Navigator.push(context, MaterialPageRoute(builder: (context){
           return TransactionFormPage(null);
         }));
-        await _loadListData();
+        // await _loadListData();
       },
       backgroundColor: Colors.greenAccent,
       foregroundColor: Colors.white,
       child: Icon(Icons.add),),
     );
   }
+//total = transactions.fold(0.0, (sum, transaction) =>  transaction.type == WalletTransactionType.income ? sum + transaction.value : sum - transaction.value);
 
-  Future<void> _loadListData() async{
-    _db.get().then((list) => {
-      setState(() {
-        transactions =  list.map((it) => WalletTransaction.fromMap(it)).toList();
-        total = transactions.fold(0.0, (sum, transaction) =>  transaction.type == TransactionType.income ? sum + transaction.value : sum - transaction.value);
-      })
-    });
-  }
 }

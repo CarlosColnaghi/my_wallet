@@ -47,7 +47,7 @@ class TransactionFormState extends State<TransactionFormPage> {
     return Colors.black;
   });
 
-  TransactionType? _transactionType = TransactionType.income;
+  WalletTransactionType? _transactionType = WalletTransactionType.income;
 
   @override
   void initState() {
@@ -98,9 +98,9 @@ class TransactionFormState extends State<TransactionFormPage> {
             ),
             SizedBox(
               height: 50,
-              child: RadioGroup<TransactionType>(
+              child: RadioGroup<WalletTransactionType>(
                 groupValue: _transactionType,
-                onChanged: (TransactionType? transactionType) {
+                onChanged: (WalletTransactionType? transactionType) {
                   setState(() {
                     _transactionType = transactionType;
                   });
@@ -109,14 +109,14 @@ class TransactionFormState extends State<TransactionFormPage> {
                   children: [
                     Flexible(
                       child: RadioListTile(
-                        title: Text(TransactionType.income.label.toString()),
-                        value: TransactionType.income,
+                        title: Text(WalletTransactionType.income.label.toString()),
+                        value: WalletTransactionType.income,
                         fillColor: _widgetStateColor),
                       ),
                     Flexible(
                       child: RadioListTile(
-                        title: Text(TransactionType.expense.label.toString()),
-                        value: TransactionType.expense,
+                        title: Text(WalletTransactionType.expense.label.toString()),
+                        value: WalletTransactionType.expense,
                         fillColor: _widgetStateColor,
                       ),
                     ),
@@ -131,7 +131,7 @@ class TransactionFormState extends State<TransactionFormPage> {
                   SizedBox(height: 30),
                   Text('Criado em ${Formatter.formatDate(widget.transaction!.createdAt!.toLocal())}', style: TextStyle(fontWeight: FontWeight.w500),),
                   Text('Atualizado em ${Formatter.formatDate(widget.transaction!.updatedAt!.toLocal())}', style: TextStyle(fontWeight: FontWeight.w500),),
-                  Text('ID: ${widget.transaction!.transactionId!}', style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text('ID: ${widget.transaction!.id!}', style: TextStyle(fontWeight: FontWeight.w500),),
                 ],
               ),
             SizedBox(height: 30),
