@@ -36,18 +36,18 @@ class WalletTransaction {
     _title = map['title'],
     _description = map['description'],
     _value = map['value'].toDouble(),
-    _type = WalletTransactionType.values.firstWhere((type) => type.label == map['type']),
+    _type = WalletTransactionType.fromString(map['type']),
     _createdAt = DateTime.parse(map['createdAt']),
     _updatedAt = DateTime.parse(map['updatedAt']);
 
   WalletTransaction.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc):
       _id = doc.id,
-      _title = doc.data()?['title'] as String,
-      _description = doc.data()?['description'] as String?,
-      _value = (doc.data()?['value'] as num).toDouble(),
+      _title = doc.data()?['title'],
+      _description = doc.data()?['description'],
+      _value = (doc.data()?['value']).toDouble(),
       _type = WalletTransactionType.fromString(doc.data()?['type']),
-      _createdAt = doc.data()?['createdAt'] as DateTime,
-      _updatedAt = doc.data()?['updatedAt'] as DateTime;
+      _createdAt = (doc.data()?['createdAt'] as Timestamp?)?.toDate(),
+      _updatedAt = (doc.data()?['updatedAt'] as Timestamp?)?.toDate();
 
 
   set title(String title){

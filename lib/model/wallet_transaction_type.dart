@@ -5,6 +5,6 @@ enum WalletTransactionType {
 
   const WalletTransactionType(this.label);
 
-  static WalletTransactionType fromString(String value) => values.firstWhere((type) => type.label.toLowerCase == value.toLowerCase);
+  static WalletTransactionType fromString(String value) => values.firstWhere((type) => type.label.toLowerCase() == value.toLowerCase());
 
 }

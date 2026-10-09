@@ -14,6 +14,7 @@ class Db{
   Future<DocumentReference> insert(WalletTransaction transaction) async {
     final data = transaction.toMap();
     data['createdAt'] = DateTime.now();
+    data['updatedAt'] = DateTime.now();
     return await _instance.add(data);
   }
 
