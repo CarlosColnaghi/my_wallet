@@ -1,71 +1,31 @@
 import 'dart:io';
 
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:my_wallet/model/transaction.dart' as model;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_wallet/model/wallet_transaction.dart';
 
 class Db{
-  String _tableName = "transactions";
-  String _id = "id";
-  String _transactionId = "transactionId";
-  String _title = "title";
-  String _description = "description";
-  String _value = "value";
-  String _type = "type";
-  String _createdAt = "createdAt";
-  String _updatedAt = "updatedAt";
-
   Db._internal();
   static final Db _db = Db._internal();
 
-  factory Db(){
-    return _db;
+  factory Db() => _db;
+
+  final _instance = FirebaseFirestore.instance.collection("mywallet");
+
+  Future<DocumentReference> insert(WalletTransaction transaction) async {
+    final data = transaction.toMap();
+    data['createdAt'] = DateTime.now();
+    data['updatedAt'] = DateTime.now();
+    return await _instance.add(data);
   }
 
-  static Database? _database;
-
-  Future<Database> initialize() async{
-    String path = "${(await getApplicationDocumentsDirectory()).path}_my_wallet_v1.db";
-    return await openDatabase(path, version: 1, onCreate: _create);
+  Future<void> update(WalletTransaction transaction, String id) async{
+    final data = transaction.toMap();
+    data['updatedAt'] = DateTime.now();
+    await _instance.doc(id).update(data);
   }
 
-  Future<Database> get database async {
-    _database ??= await initialize();
-    return _database!;
-  }
+  Stream<List<WalletTransaction>> getStream() => _instance.snapshots().map((snapshot) => snapshot.docs.map((document) => WalletTransaction.fromDocumentSnapshot(document)).toList());
 
-  void _create(Database database, int newVersion) async{
-    await database.execute("""
-      CREATE TABLE IF NOT EXISTS $_tableName (
-        $_id            INTEGER PRIMARY KEY,
-        $_transactionId TEXT NOT NULL UNIQUE DEFAULT (lower(hex(randomblob(16)))),
-        $_title         TEXT NOT NULL,
-        $_description   TEXT,
-        $_value         REAL NOT NULL,
-        $_type          TEXT NOT NULL,
-        $_createdAt     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-        $_updatedAt     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')));
-     """);
-
-    await database.execute("""
-      CREATE TRIGGER IF NOT EXISTS trg_$_tableName$_updatedAt
-      AFTER UPDATE OF $_title, $_description, $_value, $_type
-      ON transactions
-      FOR EACH ROW
-      BEGIN
-          UPDATE $_tableName
-          SET $_updatedAt = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
-          WHERE $_id = NEW.$_id;
-      END;
-    """);
-  }
-
-  Future<int> insert(model.Transaction transaction) async => await (await database).insert(_tableName, transaction.toMap());
-
-  Future<int> update(model.Transaction transaction, int id) async => await (await database).update(_tableName, transaction.toMap(), where: '$_id = ?', whereArgs: [id]);
-
-  Future<List> get() async => await (await database).rawQuery('SELECT * FROM $_tableName ORDER BY $_createdAt ASC');
-
-  Future<int> delete(int id) async => await (await database).rawDelete('DELETE FROM $_tableName WHERE $_id = $id');
+  Future<void> delete(String id) async => await _instance.doc(id).delete();
 
 }
