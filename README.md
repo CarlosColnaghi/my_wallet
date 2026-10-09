@@ -1,5 +1,7 @@
 # MyWallet
 
+> **Atualização (Avaliação 2):** Houve alterações neste projeto referentes à **Avaliação 2** (migração para Cloud Firestore). Os detalhes da refatoração são apresentados ao [final deste documento](#avaliação-2---refatoração-para-cloud-firestore).
+
 ## Introdução
 
 Este é um aplicativo desenvolvido com Flutter e Dart como parte dos estudos da disciplina Desenvolvimento Multiplataforma 3 do curso de Especialização em Desenvolvimento de Sistemas para Dispositivos Móveis do IFSP - Câmpus São Carlos.
@@ -90,3 +92,29 @@ flutter build apk --debug
 <p>
   <img src="screenshots/11-database-inspector-sqlite.png" alt="Tabela de transações SQLite no Database Inspector do Android Studio" width="900">
 </p>
+
+## Avaliação 2 - Refatoração para Cloud Firestore
+
+> **Pull Request:** As alterações desta etapa foram implementadas e versionadas no [PR #1](https://github.com/CarlosColnaghi/my_wallet/pull/1).
+
+Como próximo passo referente à **Avaliação 2**, o aplicativo foi refatorado para utilizar persistência na nuvem com o **Cloud Firestore** (Firebase) em substituição ao armazenamento local com SQLite. Com essa adaptação, as transações passam a ser sincronizadas em tempo real com a coleção `mywallet`.
+
+Bibliotecas adicionadas nesta etapa:
+- `firebase_core`
+- `cloud_firestore`
+
+### Armazenamento em nuvem (Cloud Firestore)
+
+<p>
+  <img src="screenshots/12-console-cloud-firestore.png" alt="Coleção de transações no console do Cloud Firestore" width="900">
+</p>
+
+## Vídeo demonstrativo
+
+<p>
+  <a href="https://youtu.be/m6uDiZmE7wo">
+    <img src="https://img.youtube.com/vi/m6uDiZmE7wo/maxresdefault.jpg" alt="Vídeo demonstrativo do aplicativo no YouTube" width="900">
+  </a>
+</p>
+
+Assista ao vídeo demonstrativo no YouTube: [https://youtu.be/m6uDiZmE7wo](https://youtu.be/m6uDiZmE7wo)
